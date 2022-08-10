@@ -1,4 +1,8 @@
 # csjpeg
-CS-JPEG video codec with intra-frame encoding and inter-frame decoding.
+Inspiring by compressive sensing framework, we developed CS-JPEG video codec with intra-frame encoding and inter-frame decoding. CS-JPEG is based on global sensing model which is applied to a differential frame computed as a difference between an input frame and its downsampled and upsampled version. It allows to reduce zero-order entropy of the measurements and, as a result, improve the coding performance. The downsampled version of the frame is compressed via JPEG baseline, while the measurements are quantized, subsampled using a predeﬁned look-up table and encoded using context-adaptive binary range coder. The resulting bit stream is divided into network abstract layer packets, which are embedded into an application part of the JPEG header. Such format allows to decode each frame in real-time with small resolution. At the decoder side we apply the proposed randomized Iterative Shrinkage-Thresholding Algorithm (ISTA) which pseudo- randomly selects the shrinkage parameters at each iteration. It helps to achieve a good balance between reconstruction complexity and performance.
 
-More detailed describtion of the codec is available here [http://eugeniy-belyaev.narod.ru/cs-jpeg.htm]
+References
+[1] E.Belyaev, Performance evaluation of the video codec with intra-frame encoding and inter-frame decoding, submitted to IEEE Signal Processing Letters, 2022.
+[2] E.Belyaev, Fast Decoding and Parameters Selection for CS-JPEG Video Codec, IEEE 23nd International Workshop on Multimedia Signal Processing, 2021. 
+[3] E.Belyaev, Compressive Sensed Video Coding having JPEG compatibility // IEEE International Conference on Image Processing (ICIP), 2020. 
+[4] E.Belyaev, M.Codreanu, M.Juntti, and K.Egiazarian, Compressive Sensed Video Recovery via Iterative Thresholding with Random Transforms // IET Image Processing, vol.14, iss.6, pp.1187-1199, 2020. 
