@@ -1,0 +1,266 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>CS-JPEG (video codec with intra-frame encoding and inter-frame decoding)</TITLE>
+
+<STYLE TYPE="text/css">
+
+</STYLE>
+<style type="text/css">
+A:link {text-decoration: none}
+A:visited {text-decoration: none} 
+A:active {text-decoration: none}
+A:hover {text-decoration: none}
+</style>
+<style type="text/css">
+A:link {text-decoration: none}
+A:visited {text-decoration: none} 
+A:active {text-decoration: none}
+A:hover {text-decoration: none}
+</style>
+
+<BODY>
+
+</HEAD>
+
+<BODY background="Fone.gif">
+
+<FONT SIZE=4 COLOR="0"><UL TYPE=DISC>
+
+</HEAD>
+
+
+
+<TABLE cellpadding=10>
+
+<TR>
+
+
+
+<TD rowspan=2 width=0>
+
+
+
+</TD>
+
+
+
+<TD colspan=2>
+
+
+
+
+
+
+
+<FONT 		style="TEXT-DECORATION: none"
+			face=Verdanta 
+			color=0 
+			size=5>
+<p align="center"><B>CS-JPEG (video codec with intra-frame encoding and inter-frame decoding)</B></p>
+</FONT>
+<FONT 		style="TEXT-DECORATION: none"
+			face=Verdanta 
+			color=0 
+			size=2>
+<p align="center">This research was supported by the Government of the Russian Federation through the ITMO Fellowship and Professorship Program and by the Analytical Center for the Government
+of the Russian Federation .</p>
+</FONT>
+
+
+
+
+<FONT 		style="TEXT-DECORATION: none"
+			face=Verdanta 
+			color=0 
+			size=4>
+</FONT>
+
+ 
+</B>
+</TD>
+
+
+
+</TR>
+
+<TR>
+
+
+<TD align=top>
+
+<FONT 		style="TEXT-DECORATION: none"
+			face=Verdanta 
+			color=0 
+			size=5>
+<p><B>1. Introduction</B></p> 
+</FONT>
+
+<p align="justify">There exist applications where real-time video is compressed and transmitted over highly unreliable wireless channel and,
+at the same time, both computational (or battery) resources and memory capacity of the transmission device are very limited. Examples include video transmission for deep space missions, wireless endoscopy, video coding on wireless mobile terminals, wireless multimedia sensors and so on. In such applications, a video encoding resources (complexity and memory) are very limited, and a video bit stream should be robust to losses in a communication channel.
+
+<p align="justify">The most widely used video codecs based on H.264/AVC and H.265/HEVC standards (and their commercial equivalents) utilize variable block-size motion estimation and compensation, intra prediction, in-loop ﬁltering and other high complex tools at an encoder side. It allows to achieve a high compression ratio for a given visual quality with a price of a high sensitivity of the video bit stream to packet losses. Both the error propagation level caused by the motion compensation and the encoding complexity could be reduced if all frames are compressed independently in intra mode. However, it drops the coding efficiency.
+
+
+
+<p align="justify">As an alternative, video coding based on 3-D discrete wavelet transform (<A href="http://eugeniy-belyaev.narod.ru/3d_dwt.htm">3-D DWT</A>) could be used. First, the 3-D DWT codec exploits a parent-child dependency between wavelet subbands in order to predict when 2-D DWT with corresponding entropy coding could be skipped. It allows to achieve lower computational complexity comparing to H.264/AVC. Second, instead of motion compensation, the 3-D DWT codec utilizes 1-D DWT for a pixels located at the same positions in neighbor frames, and encodes each subband independently from each other. It makes the video bit
+stream more robust to packet losses than H.264/AVC. However, since the 3-D DWT codec needs accumulation of 8 or 16 frames, it requires a lot of encoding memory and introduces an algorithmic delay.
+
+
+<p align="justify">One of the promising video coding concepts that supports the low encoding complexity is Distributed Video Coding (DVC).
+As it was shown by Wyner and Ziv, a statistical redundancy of a (video) signal could be exploited at the decoder side, i.e., the encoder complexity could be shifted to 
+the decoder side. There are two main DVC implementations which are
+still under development: the first one is based on <b>syndrome coding</b>, the second one, considered in this project, is
+based on <b>compressive sensing</b> (CS). 
+
+<p align="justify">The most famous video codec based on the syndrome coding is DISCOVER, which works in the following way. At the encoder side some frames are intra encoded 
+(called key frames) via H.264/AVC. The remaining frames are compressed via syndrome coding, i.e, for each segment of an input frame a syndrome of an error-correcting code is 
+computed and transmitted to the decoder. At the decoder side, already reconstructed frames are used for motion estimation in order to model the most similar segment 
+(called side information). Then the received syndrome and the corresponding side information are used for syndrome decoding, assuming the side information as a sum of an 
+original segment and a vector of errors. However, such syndrome coding has the following disadvantages. First, the utilization of H.264/AVC makes the whole architecture more 
+sophisticated and increases the encoding complexity. Second, in order to calculate a syndrome, DISCOVER needs to calculate 4x4 DCT, perform binarization and error-correction
+coding for each binary vector. It makes the encoding potentially not faster than x264-intra, where only a tranform is applied. Third, a feedback channel concept assuming
+that the decoder is communicating with the encoder is not realistic for real-life applications. Finally, such a scheme is vulnerable 
+to distortion in the key frames caused by packet losses. As a result, in order to provide acceptable visual quality, additional bits should be 
+transmitted via a feedback channel.
+
+<FONT 		style="TEXT-DECORATION: none"
+			face=Verdanta 
+			color=0 
+			size=5>
+<p><B>2. CS-JPEG codec based on compressive sensing framework</B></p> 
+</FONT>
+
+<p align="justify">In this project, we consider video coding based on compressive sensing (CS) framework. Earlier, it was shown that if an image is sparse in some transform domain, then it could be recovered from much smaller number of samples (called measurements) than the Nyquist – Shannon theorem requires. Additionally, the measurements could be quantized and entropy encoded as well. Therefore, the quality of reconstruction depends on both the number of measurements and the number of bits per measurement. Moreover, the measurements could be coded and transmitted independently, i.e., in a case of packet losses, it is enough to just use all the remaining successfully received measurements for the recovery. Recently, several CS based video coding approaches, such as DISCOS, DCVS, MH-BCS, MC-BCS and AR-BCS, have been developed. However, these codecs signiﬁcantly inferior in rate-distortion performance to
+the mentioned above intra-frame encoding codecs, such as DISCOVER, H.264/AVC or H.265/HEVC. Therefore, new methods combining advantages of CS video coding and acceptable coding performance should be developed.
+
+<p align="justify">Inspired by compressive sensing framework, in this project, we propose a new video coding scheme having JPEG compatibility with intra-frame encoding and
+inter-frame decoding (CS-JPEG). CS-JPEG is based on global sensing model which is applied to a differential frame computed as a difference between an input frame and its 
+downsampled and upsampled version. It allows to reduce zero-order entropy of the measurements and, as a result, improve the coding performance. The downsampled version 
+of the frame is compressed via JPEG baseline, while the measurements are quantized, subsampled using a predeﬁned look-up table and encoded using context-adaptive binary 
+range coder. The resulting bit stream is divided into network abstract layer packets, which are embedded into an application part of the JPEG header. Such format allows to 
+decode each frame in real-time with small resolution. At the decoder side we apply the proposed randomized Iterative Shrinkage-Thresholding Algorithm (ISTA) which pseudo-
+randomly selects the shrinkage parameters at each iteration. It helps to achieve a good balance between reconstruction complexity and performance.
+</p><center><IMG SRC="./materials/cs-jpeg2.0.png" width="70%"></center>
+
+<FONT 		style="TEXT-DECORATION: none"
+			face=Verdanta 
+			color=0 
+			size=5>
+<p><B>3. Rate-distortion comparison with H.264/AVC and H.265/HEVC</B></p> 
+</FONT>
+
+<p align="justify"> The following table shows the encoding speed comparison of the proposed CS-JPEG codec
+with MATLAB implementation of JPEG, x264  and x265 which are fast software implementations of H.264/AVC and H.265/HEVC 
+encoders, respectively. All the codecs were run without any software optimization tools, such as assembler optimization
+or threads. Here ultrafast means that x264 or x265 encoder is used in its fastest preset, while veryslow corresponds to the
+full RD optimization. One can see that in average CS-JPEG encoder is 2.2, 1.9, 26.2 and 30.5 times faster than JPEG,
+x264-ultrafast, x264-veryslow and x265-ultrafast, respectively.
+</p><center><IMG SRC="./materials/speedcomparison.png" width="30%"></center>
+
+<p align="justify"> The following table shows ΔPSNR provided by CS-JPEG codec in comparison to the intra-codecs mentioned above. Here the positive values mean that CS-JPEG provides better performance.
+One can see that in average CS-JPEG provides much faster encoding with better recovery performance than JPEG, x264-ultrafast and x265-ultrafast. However, the relative recovery
+performance highly depends on statistical properties of a video sequence. From one hand, CS-JPEG exploits the temporal
+similarity between neighbor frames, i.e., higher similarity means better reconstruction. On the other hand, if the temporal similarity is low, then the traditional block-based intra codecs
+could provide better performance since they exploit the spatial similarity of pixels within a frame more efﬁciently. In order
+to show this effect numerically, we introduced the temporal similarity level S using the same equation as for PSNR
+calculation, where the mean square error is calculated between current frame and motion-compensated previous frame. One
+can see that if S > 30 dB, then in the most of the cases CS-JPEG outperforms the competitors including x264-veryslow.
+If S < 30, then the temporal similarity is too low, so that the traditional block-based intra coding has more advantages.
+</p><center><IMG SRC="./materials/rdcomparison2.0.png" width="30%"></center>
+
+<p align="justify">The following video shows comparison between the proposed CS-JPEG and JPEG, x264-intra-ultrafast and x265-intra-ultrafast. 
+All the codecs, except JPEG, were run in constant bit rate mode
+with target bit rate 1000 kbps.  For JPEG we manually found the closest quality factor
+which provides the requred target bit rate. We also computed well-known VMAF quality metrics which shows that PSNR and VMAF are not always
+show the same results, i.e., in some cases CS-JPEG is worse than x264 and x265 in PSNR, but better in VMAF. It means that a more detailed
+subjective quality assessment is needed in the future research.
+<center>
+<video width="704" height="576" controls loop>
+  <source src="./materials/csjpeg_demo.mp4" type="video/mp4">
+Your browser does not support the video tag.
+</video>
+</center>
+
+<p align=justify>A more detailed rate-distortion comparison is available 
+<A href="./materials/cs_jpeg_rdcomparison.pdf">
+	<FONT 		style="TEXT-DECORATION: none"
+			face=Verdanta 
+			color=ff0000 
+			size=3><B>here</B>
+	</FONT>
+</A>.
+
+
+<FONT 		style="TEXT-DECORATION: none"
+			face=Verdanta 
+			color=0 
+			size=5>
+<p><B>Software</B></p> 
+</FONT>
+
+
+<p align=justify>CS-JPEG codec, Version 2.0 
+<A href="./csjpeg/cs_jpeg_2.0.7z">
+	<FONT 		style="TEXT-DECORATION: none"
+			face=Verdanta 
+			color=ff0000 
+			size=3><B>[download]</B>
+	</FONT>
+</A>
+
+<HR>
+
+
+
+If you plan to use CS-JPEG software, please also refer to the following papers:
+<FONT 		style="TEXT-DECORATION: none"
+			face=Verdanta 
+			color=0 
+			size=5>
+<p><B>References</B></p> 
+</FONT>
+
+<p>[1] E.Belyaev, Performance evaluation of the video codec with intra-frame encoding and inter-frame decoding, <I>submitted to IEEE Signal
+Processing Letters</I>, 2022.
+<br>[2] E.Belyaev, Fast Decoding and Parameters Selection for CS-JPEG Video Codec, <I>IEEE 23nd International Workshop on Multimedia Signal Processing</I>, 2021.
+<A href="https://ieeexplore.ieee.org/">
+	<FONT 		style="TEXT-DECORATION: none"
+			face=Verdanta 
+			color=ff0000 
+			size=3><B>[download]</B>
+	</FONT>
+</A>
+<br>[3] E.Belyaev, Compressive Sensed Video Coding having JPEG compatibility // <I>IEEE International Conference on Image Processing (ICIP)</I>, 2020.
+<A href="https://ieeexplore.ieee.org/document/9190857">
+	<FONT 		style="TEXT-DECORATION: none"
+			face=Verdanta 
+			color=ff0000 
+			size=3><B>[download]</B>
+	</FONT>
+</A>
+<br>[4] E.Belyaev, M.Codreanu, M.Juntti, and K.Egiazarian, Compressive Sensed Video Recovery via Iterative Thresholding with Random Transforms // <I>IET Image Processing</I>, vol.14, iss.6, pp.1187-1199, 2020.
+<A href="https://ietresearch.onlinelibrary.wiley.com/doi/epdf/10.1049/iet-ipr.2019.0661">
+	<FONT 		style="TEXT-DECORATION: none"
+			face=Verdanta 
+			color=ff0000 
+			size=3><B>[download]</B>
+	</FONT>
+</A>
+
+
+
+
+</TD>
+
+</TR>
+
+</TABLE>
+
+
+<CENTER>
+
+</FONT>
+
+</BODY>
