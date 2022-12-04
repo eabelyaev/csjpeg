@@ -10,7 +10,7 @@ Demo with visual comparison is available in csjpeg_demo.mp4<br />
 Folder **/bin** contains executable file of the codec with the corresponding encoding and decoding examples. 
 
 **References**<br />
-[1] E.Belyaev, Rate Control and Fast Randomized Thresholding for CS-JPEG Video Codec based on Compressive Sensing, *submitted to Sensors*, 2022.
+[1] E.Belyaev, Rate Control and Fast Randomized Thresholding for CS-JPEG Video Codec based on Compressive Sensing, *submitted to Sensors*, 2022.<br />
 [2] E.Belyaev, Fast Decoding and Parameters Selection for CS-JPEG Video Codec, *IEEE 23nd International Workshop on Multimedia Signal Processing*, 2021.<br />
 [3] E.Belyaev, Compressive Sensed Video Coding having JPEG compatibility, *IEEE International Conference on Image Processing (ICIP)*, 2020.<br />
 [4] E.Belyaev, M.Codreanu, M.Juntti, and K.Egiazarian, Compressive Sensed Video Recovery via Iterative Thresholding with Random Transforms, *IET Image Processing*, vol.14, iss.6, pp.1187-1199, 2020. 
