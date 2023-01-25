@@ -4,13 +4,12 @@ Inspiring by compressive sensing framework we developed **CS-JPEG video codec** 
 2. CS-JPEG achieves **improvements in ΔPSNR** by 2.21, 0.74 and 1.40 dB compares to JPEG, x264-intra (ultrafast) and x265 (ultrafast), respectively.
 3. CS-JPEG provides a high level of quality **scalability**. 
 
-More detailed rate-distortion and complexity results can be found in cs_jpeg_rdcomparison.pdf<br />
 Demo with visual comparison is available in csjpeg_demo.mp4<br />
 
 Folder **/bin** contains executable file of the codec with the corresponding encoding and decoding examples. 
 
 **References**<br />
-[1] E.Belyaev, Rate Control and Fast Randomized Thresholding for CS-JPEG Video Codec based on Compressive Sensing, *submitted to Sensors*, 2022.<br />
+[1] E.Belyaev, An Effi cient Compressive Sensed Video Codec with Inter-Frame Decoding and Low-Complexity Intra-Frame Encoding, *Sensors*, 2023.<br />
 [2] E.Belyaev, Fast Decoding and Parameters Selection for CS-JPEG Video Codec, *IEEE 23nd International Workshop on Multimedia Signal Processing*, 2021.<br />
 [3] E.Belyaev, Compressive Sensed Video Coding having JPEG compatibility, *IEEE International Conference on Image Processing (ICIP)*, 2020.<br />
 [4] E.Belyaev, M.Codreanu, M.Juntti, and K.Egiazarian, Compressive Sensed Video Recovery via Iterative Thresholding with Random Transforms, *IET Image Processing*, vol.14, iss.6, pp.1187-1199, 2020. 
